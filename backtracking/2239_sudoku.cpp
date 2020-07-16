@@ -1,67 +1,48 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <vector>
 
-using namespace std;
-
-bool flag = false;
-
-bool rectangle_is_legit(vector<vector<int> >v, int row, int col, int num) {
+bool check_legit(int v[][9], int row, int col, int num) {
     int now_row = (row / 3) * 3;
     int now_col = (col / 3) * 3;
     for(int i = 0; i < 3; i++) {
         for(int j = 0; j < 3; j++) {
-            if(v[now_row + i][now_col + j] == num) return false;
+            if(v[now_row + i][now_col + j] == num || v[row][3 * i + j] == num || v[3 * i + j][col] == num) return false;
         }
     }
     return true;
 }
 
-bool row_col_is_legit(vector<vector<int> >v, int row, int col, int num) {
-    for(int i = 0; i < 9; i++) {
-        if(v[row][i] == num || v[i][col] == num) return false;
-    }
-    return true;
-}
-
-void print_matrix(vector<vector <int> >v) {
-    for(int i = 0; i < 9; i++) {
-        for(int j = 0; j < 9; j++) printf("%d", v[i][j]);
-        printf("\n");
-    }
-    return;
-}
-
-void run_sudoku(vector<vector<int> >v, int row, int col) {
-    //printf("(%d, %d)\n", row, col);
-    while(v[row][col] != 0) {
-        col++;
-        if(col >= 9) {
-            if(row == 8) {
-                print_matrix(v);
-                flag = true;
-                return;
-            }
-            col = 0;
-            row++;
+void run_sudoku(int v[][9], std::vector<int> zero, int index) {
+    if(index == zero.size()) {
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) printf("%d", v[i][j]);
+            printf("\n");
         }
+        exit(0);
     }
-    for(int i = 1; i <= 9; i++) {
-        if(flag) return;
-        if(rectangle_is_legit(v, row, col, i) && row_col_is_legit(v, row, col, i)) {
+    int row = zero[index] / 9;
+    int col = zero[index] % 9;
+    for(int i = 1; i <= 9; i++) { 
+        if(check_legit(v, row, col, i)) {
             v[row][col] = i;
-            run_sudoku(v, row, col);
+            run_sudoku(v, zero, index + 1);
+            v[row][col] = 0;
         }
     }
 }
 
 int main() {
-    vector<vector<int> > sudoku(9);
-    char s[9];
+    int sudoku[9][9];
+    char*s;
+    std::vector<int> zero;
+    scanf("%s", s);
     for(int i = 0; i < 9; i++) {
-        sudoku[i] = vector<int>(9);
-        scanf("%s", s);
-        for(int j = 0; j < 9; j++) sudoku[i][j] = s[j] - 48;
+        for(int j = 0; j < 9; j++) {
+            sudoku[i][j] = s[i * 9 + j] - 48;
+            if(sudoku[i][j] == 0) zero.push_back(i * 9 + j);
+        }
     }
-    run_sudoku(sudoku, 0, 0);
+    run_sudoku(sudoku, zero, 0);
     return 0;
 }
