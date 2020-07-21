@@ -13,7 +13,7 @@ void get_points(std::vector<int> &v, int n) {
     }
     else if(n == 2) {
         if(v[0] == 0) get_points(v, 0);
-        v[n] == v[0]
+        
     }
 }
 
