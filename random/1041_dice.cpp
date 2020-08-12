@@ -52,8 +52,6 @@ int main() {
     int two = get_two();
     int three = get_three();
 
-    cout << two << " " << three << " " << small << endl;
-
     long long th3 = 4 * three;
     long long tw2 = two * (8 * n - 12);
     long long one = small * ((n - 2) * (n - 2) * 5 + (n - 2) * 4);
