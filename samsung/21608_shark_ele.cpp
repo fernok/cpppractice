@@ -5,10 +5,8 @@ using namespace std;
 int n;
 int seat[22][22];
 int like[22][22];
-int favorite[400][5];
-int map[400];
-
-// score : (like) * 10 + (empty)
+int favorite[401][5];
+int map[401];
 
 void print() {
     for (int i = 1; i <= n; i++) {
@@ -112,11 +110,8 @@ int main(int argc, char** argv) {
         }
     }
 
-    for (i = 1; i <= n; i++) {
-        for (j = 1; j <= n; j++) {
-            traverse(1, 1, favorite[((i - 1) * n) + (j - 1)][0], 0, 0, 0);
-            // print();
-        }
+    for (i = 1; i <= n * n; i++) {
+        traverse(1, 1, favorite[i - 1][0], -1, 0, 0);
     }
 
     for (i = 1; i <= n; i++) {
@@ -136,6 +131,8 @@ int main(int argc, char** argv) {
             if (like[i][j] == 4) sum += 1000;
         }
     }
+
+    // print();
 
     cout << sum << endl;
 
