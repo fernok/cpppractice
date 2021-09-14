@@ -6,28 +6,15 @@ int n;
 
 int grid[22][22];
 
-int saved[22][22];
-
 int largest = 0;
 
 void left_right(int, int);
 void up_down(int, int);
 
-void print() {
-    cout << endl;
+void reset(int s[][22]) {
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= n; j++) {
-            cout << grid[i][j];
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
-void save() {
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            saved[i][j] = grid[i][j];
+            grid[i][j] = s[i][j];
         }
     }
 }
@@ -36,15 +23,22 @@ void scan() {
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= n; j++) {
             if (grid[i][j] > largest) largest = grid[i][j];
-
-            grid[i][j] = saved[i][j];
         }
     }
 }
 
 // direction = 1 => left, -1 => right
 void left_right(int level, int direction) {
-    save();
+    int s[22][22];
+
+    int c[22][22];
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            s[i][j] = grid[i][j];
+        }
+    }
+
     int rightmost;
     int moving_pos;
     int temp_pos;
@@ -72,6 +66,7 @@ void left_right(int level, int direction) {
                     grid[i][moving_pos] = tmp;
                     break;
                 } else {
+                    changed = grid[i][rightmost];
                     grid[i][rightmost] = 0;
                     grid[i][moving_pos] = changed;
                     moving_pos += direction;
@@ -82,19 +77,40 @@ void left_right(int level, int direction) {
         
     }
 
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            c[i][j] = grid[i][j];
+        }
+    }
+
     if (level == 5) {
         scan();
+        reset(s);
         return;
     }
 
+    left_right(level + 1, direction);
+    reset(c);
     left_right(level + 1, -1 * direction);
+    reset(c);
     up_down(level + 1, -1);
+    reset(c);
     up_down(level + 1, 1);
+
+    reset(s);
     return;
 }
 
 void up_down(int level, int direction) {
-    save();
+    int s[22][22];
+
+    int c[22][22];
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            s[i][j] = grid[i][j];
+        }
+    }
     int rightmost;
     int moving_pos;
     int temp_pos;
@@ -122,6 +138,7 @@ void up_down(int level, int direction) {
                     grid[moving_pos][i] = tmp;
                     break;
                 } else {
+                    changed = grid[rightmost][i];
                     grid[rightmost][i] = 0;
                     grid[moving_pos][i] = changed;
                     moving_pos += direction;
@@ -133,12 +150,25 @@ void up_down(int level, int direction) {
 
     if (level == 5) {
         scan();
+        reset(s);
         return;
     }
 
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            c[i][j] = grid[i][j];
+        }
+    }
+
+    up_down(level + 1, direction);
+    reset(c);
     up_down(level + 1, -1 * direction);
+    reset(c);
     left_right(level + 1, -1);
+    reset(c);
     left_right(level + 1, 1);
+
+    reset(s);
     return;
 }
 
