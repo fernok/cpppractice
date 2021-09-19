@@ -4,18 +4,7 @@ using namespace std;
 
 int n, h;
 
-int orders[200000];
-int cave[500000] = { 0, };
-
-void print(int index) {
-    cout << index << " ) ";
-
-    for (int i = 0; i < h; i++) cout << cave[i] << " ";
-
-    cout << endl;
-
-    return;
-}
+vector<int> top, bottom;
 
 int main() {
     cin >> n >> h;
@@ -23,41 +12,30 @@ int main() {
     int i, j;
     int x;
 
-    for (i = 0; i < n; i++) cin >> orders[i];
-
     for (i = 0; i < n; i++) {
-        x = orders[i];
-        
-        if (i % 2) {
-            for (j = h - 1; j >= (h - x); j--) {
-                cave[j]++;
-            }
-        } else {
-            for (j = 0; j < x; j++) {
-                cave[j]++;
-            }
-        }
-
-        print(x);
+        cin >> x;
+        if (i % 2) top.push_back(x);
+        else bottom.push_back(x);
     }
+
+    sort(top.begin(), top.end());
+    sort(bottom.begin(), bottom.end());
 
     int answer = 500000;
     int nums = 0;
 
     for (i = 0; i < h; i++) {
-        if (cave[i] < answer) {
-            answer = cave[i];
+        int temp = bottom.size() - (lower_bound(bottom.begin(), bottom.end(), i + 1) - bottom.begin());
+        temp += top.size() - (lower_bound(top.begin(), top.end(), h - i) - top.begin());
+        
+        if (temp < answer) {
+            answer = temp;
             nums = 1;
-        } else if (cave[i] == answer) {
+        } else if (temp == answer) {
             nums++;
-        } else {
-            continue;
         }
     }
-
     cout << answer << " " << nums << endl;
-
-    // for (i = 0; i < n; i++) cout << cave[i] << endl;
 
     return 0;
 }

@@ -4,6 +4,7 @@
         "__tree": "cpp",
         "map": "cpp",
         "ostream": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "algorithm": "cpp"
     }
 }
