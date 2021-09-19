@@ -13,6 +13,10 @@ int survival_time = 0;
 
 int dir_y[] = {1, -1, 0, 0};
 int dir_x[] = {0, 0, -1, 1};
+
+int change_L[] = {UP, DOWN, LEFT, RIGHT};
+int change_D[] = {DOWN, UP, RIGHT, LEFT};
+
 int direction = RIGHT;
 
 queue<vector<int> > snake;
@@ -41,6 +45,16 @@ int main() {
     for (i = 0; i < l; i++) {
         cin >> amount >> direction;
         commands.push(make_pair(amount, direction));
+    }
+
+    snake.push(vector<int> v{0, 0, 0, 0});
+
+    for (i = 0; i < l; i++) {
+        auto p = commands.front();
+        commands.pop();
+        amount = p.first;
+        direction = p.second;
+        
     }
     
 
